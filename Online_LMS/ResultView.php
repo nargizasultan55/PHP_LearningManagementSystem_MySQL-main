@@ -70,7 +70,7 @@
 // load assignments to the dropdown in the current year
                                     $connection = new mysqli("localhost", "root", "", "online_lms");
                                     $table = $connection->query("SELECT * FROM `assignment` WHERE 
-                                    `from` LIKE '" . date("Y") . "%'");
+                                    `start_date` LIKE '" . date("Y") . "%'");
 
                                     for ($i = 0; $i < $table->num_rows; $i++) {
                                         # code...

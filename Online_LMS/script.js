@@ -1023,6 +1023,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function LoadAssignmentTable() {
+    var assignmentId = document.getElementById("assignmentId").value;
+    if (assignmentId == "0") {
+        document.getElementById("container").innerHTML = "";
+        return;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "process_resultView.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onload = function () {
+        var data = JSON.parse(xhr.responseText);
+        var html = "";
+        data.forEach(function(row) {
+            html += "<tr>";
+            html += "<td>" + row.id + "</td>";
+            html += "<td>" + row.user_username + "</td>";
+            html += "<td>" + row.submitted_at + "</td>";
+            html += "<td><a href='" + row.file_path + "'>Download</a></td>";
+            html += "<td>" + row.marks + "</td>";
+            html += "<td>" + (row.marks >= 40 ? "Pass" : "Fail") + "</td>";
+            html += "</tr>";
+        });
+        document.getElementById("container").innerHTML = html;
+    };
+    xhr.send("assignment_id=" + encodeURIComponent(assignmentId));
+}
 $(document).ready(function(){
 
     $(window).fadeThis();

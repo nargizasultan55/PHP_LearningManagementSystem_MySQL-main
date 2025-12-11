@@ -19,17 +19,17 @@ for ($i=0; $i < $table->num_rows; $i++) {
     <tr>
         <th scope="row"><?php echo($row["id"])?></th>
         <td><?php echo($row["user_username"])?></td>
-        <td><?php echo($row["date_time"])?></td>
+        <td><?php echo($row["submitted_at"])?></td>
         <?php 
         // if check assignment submitted or not
-        if($row["answer_location"]=="null"){
+        if($row["file_path"]=="null"){
             ?>
                 <td><label class="text-danger">Not submitted</label></td>
             <?php
         }else{
             ?>
             <!-- view assignment -->
-                <td><a href="<?php echo($row["answer_location"])?>" class="btn btn-success">View</a></td>
+                <td><a href="<?php echo($row["file_path"])?>" class="btn btn-success">View</a></td>
             <?php
         }
         ?>
