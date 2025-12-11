@@ -223,7 +223,7 @@ INSERT INTO `mark_status` (`id`,`name`) VALUES (4,'Released')
 -- submitted assignments table
 DROP TABLE IF EXISTS `user_has_release_assignment`;
 CREATE TABLE `user_has_release_assignment` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_username` VARCHAR(100) NOT NULL,
   `assignment_id` VARCHAR(45) NOT NULL,
   `file_path` VARCHAR(255) DEFAULT NULL,

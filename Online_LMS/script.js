@@ -411,7 +411,7 @@ function AddAssignment() {
         request.onreadystatechange = function () {
             if (request.readyState == 4 && request.status == 200) {
 
-                // alert("request.responseText");
+                
                 var jsonResponseText = request.responseText;
                 var jsResponseObject = JSON.parse(jsonResponseText);
 

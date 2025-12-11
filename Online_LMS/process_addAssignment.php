@@ -74,10 +74,16 @@ if($group=="0"){
     }
 }
             // file save to the given directory
-            $file_location = $_FILES["file"]["tmp_name"];
-            move_uploaded_file($file_location, $new_file_location);
-
-            $phpResponseObject->msg = "Succesfully Added Assignment";
+           $file_location = $_FILES["file"]["tmp_name"];
+if (!is_uploaded_file($file_location)) {
+    $phpResponseObject->msg = "Файл не загружен!";
+} else if (!is_dir("Assignments")) {
+    $phpResponseObject->msg = "Папка Assignments не найдена!";
+} else if (!move_uploaded_file($file_location, $new_file_location)) {
+    $phpResponseObject->msg = "Ошибка сохранения файла!";
+} else {
+    $phpResponseObject->msg = "Succesfully Added Assignment";
+}
     }
 }
 
