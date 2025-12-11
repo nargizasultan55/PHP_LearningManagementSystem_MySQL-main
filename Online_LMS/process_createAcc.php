@@ -74,7 +74,8 @@ if ($userType == "0") {
     $nextMonth = $currentDate->format('Y-m-d');
 
     // set trail period with group for temporary
-    $connection->query("INSERT INTO `user_has_group` VALUES('" . $username . "','1','" . $nextMonth . "')");
+    
+    $connection->query("INSERT INTO `user_has_group` (`user_username`, `group_id`, `expire_date`) VALUES ('" . $username . "', '1', '" . $nextMonth . "')");
 
     if ($table) {
         // if insert process done then

@@ -41,7 +41,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="ProfileAccademic.php">Profile</a>
                             <a class="dropdown-item" href="AccademicDash.php">Dashboard</a>
-                            <a class="dropdown-item" href="StudentManage.php">Student Manage</a>
+                            <!-- <a class="dropdown-item" href="StudentManage.php">Student Manage</a> -->
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="SignOut.php">Sign Out</a>
                         </div>
@@ -76,13 +76,13 @@
                         </form>
 
                     </div>
-
+<!-- 
                     <div class="col-12 mt-3">
                         <form action="StudentManage.php">
                             <button class="btn btn-outline-dark col-12" type="submit">Student Manage</button>
                         </form>
 
-                    </div>
+                    </div> -->
 
                     <div class="col-12 mt-5 mb-2">
                         <form action="SignOut.php">

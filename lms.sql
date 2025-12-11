@@ -245,4 +245,24 @@ ON DUPLICATE KEY UPDATE
   `submitted_at`=VALUES(`submitted_at`),
   `marks`=VALUES(`marks`),
   `mark_status_id`=VALUES(`mark_status_id`);
+
+CREATE TABLE `request` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `email` VARCHAR(100) NOT NULL,
+  `user_type_id` INT NOT NULL,
+  `first_name` VARCHAR(50) NOT NULL,
+  `last_name` VARCHAR(50) NOT NULL,
+  `mobile` VARCHAR(20),
+  `address_1` VARCHAR(100),
+  `address_2` VARCHAR(100),
+  `city_id` INT,
+  `gender_id` INT,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO `request` (`email`, `user_type_id`, `first_name`, `last_name`, `mobile`, `address_1`, `address_2`, `city_id`, `gender_id`)
+VALUES
+('student1@example.com', 3, 'Ivan', 'Ivanov', '89991234567', 'Lenina 1', 'Kv 10', 1, 1),
+('teacher1@example.com', 2, 'Olga', 'Petrova', '89997654321', 'Pushkina 5', '', 2, 2),
+('student2@example.com', 3, 'Anna', 'Sidorova', '89993456789', 'Gagarina 3', '', 1, 2);
 SET FOREIGN_KEY_CHECKS=1;
