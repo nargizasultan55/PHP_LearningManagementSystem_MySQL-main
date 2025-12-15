@@ -43,7 +43,7 @@
                             <a class="dropdown-item" href="TeacherDash.php">Dashboard</a>
                             <a class="dropdown-item" href="NoteAdd.php">Lesson Notes</a>
                             <a class="dropdown-item" href="AddAssignment.php">Assignments</a>
-                            <a class="dropdown-item" href="ResultView.php">Answers</a>
+                           
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="SignOut.php">Sign Out</a>
                         </div>
@@ -85,12 +85,7 @@
                         </form>
 
                     </div>
-                    <div class="col-12 mt-3 mb-4">
-                        <form action="ResultView.php">
-                            <button class="btn btn-outline-dark col-12" type="submit">Assignment Marks</button>
-                        </form>
-
-                    </div>
+               
 
                     <div class="col-12 mt-3 mb-3">
 

@@ -30,7 +30,7 @@
                     <div class="btn-group col-lg-2">
                         <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <!-- check if user log in or not -->
-                            <?php session_start(); 
+                            <?php session_start();
                             if (!isset($_SESSION["u"])) {
                                 header("Location: SignIn.php");
                                 exit;
@@ -67,7 +67,7 @@
                                 <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="assignmentId" onchange="LoadAssignmentTable();">
                                     <option selected value="0">Select</option>
                                     <?php
-// load assignments to the dropdown in the current year
+                                    // load assignments to the dropdown in the current year
                                     $connection = new mysqli("localhost", "root", "", "online_lms");
                                     $table = $connection->query("SELECT * FROM `assignment` WHERE 
                                     `start_date` LIKE '" . date("Y") . "%'");
@@ -91,12 +91,14 @@
                             <?php
 
                             $table2 = $connection->query("SELECT * FROM `user` WHERE `username`='" . $_SESSION["u"] . "'");
-// check which user type log in
+                            // check which user type log in
+
                             if ($table2->num_rows) {
                                 $row2 = $table2->fetch_assoc();
-                                if ($row2["user_type_id"] == "2") {
-                                ?>
-                                    <!-- Teacher View -if user type is teacher -->
+                                // Например, показывать оба блока для user_type_id == 4 (или уберите условие вообще)
+                                if ($row2["user_type_id"] == "4") {
+                            ?>
+                                    <!-- Teacher View - Add Marks -->
                                     <div class="col-12 col-lg-4 mt-3 mb-2">
                                         <label class="form-label text-black">Student Id</label>
                                         <input type="text" class="form-control col-4" id="sid" />
@@ -107,55 +109,52 @@
                                     </div>
                                     <div class="col-12 col-lg-4 mt-3 mb-2">
                                         <label class="form-label text-black"></label>
-                                        <!-- can add marks to the student for selected assignment -->
                                         <button class="btn btn-info col-12 mt-2" onclick="AddMarks();">Add Marks</button>
                                     </div>
                                     <div id="message" class="col-12 text-center"></div>
-                                <?php
-                                } else if ($row2["user_type_id"] == "4") {
-                                ?>
-                                    <!-- Mentor view - if user type is officer-->
-                                    <div class="col-12 col-lg-12 mt-3 mb-2 text-center">
+
+                                    <!-- Mentor View - Release Marks -->
+                                    <div class="col-12 col-lg-4 offset-lg-8 mt-3 mb-2">
                                         <label class="form-label text-black"></label>
-                                        <!-- can release marks to the students after all student marks were added -->
-                                        <button class="btn btn-warning col-4" onclick="ReleaseMarks();">Release Marks</button>
+                                        <button class="btn btn-warning col-12 mt-2" onclick="ReleaseMarks();">Release Marks</button>
                                     </div>
-                                    <div id="message" class="col-12 text-center"></div>
-                                <?php
+                        </div>
+                        <div id="message" class="col-12 text-center"></div>
+                <?php
                                 }
                             }
-                            ?>
+                ?>
 
 
 
-                        </div>
                     </div>
-                    <div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Student Id</th>
-                                    <th scope="col">Submitted Time</th>
-                                    <th scope="col">Answers</th>
-                                    <th scope="col">Marks</th>
-                                    <th scope="col">Status</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="container">
-                                <!-- load selected assignment answers that student provide when assignment select -->
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
-            </div>
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Student Id</th>
+                                <th scope="col">Submitted Time</th>
+                                <th scope="col">Answers</th>
+                                <th scope="col">Marks</th>
+                                <th scope="col">Status</th>
 
+                            </tr>
+                        </thead>
+                        <tbody id="container">
+                            <!-- load selected assignment answers that student provide when assignment select -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
-        <div class="col-12 text-center text-black-50 mt-4 mb-2">
-            <label>PHP_2025</label>
-        </div>
+
+    </div>
+    <div class="col-12 text-center text-black-50 mt-4 mb-2">
+        <label>PHP_2025</label>
+    </div>
     </div>
 
     <script src="bootstrap.bundle.js"></script>
