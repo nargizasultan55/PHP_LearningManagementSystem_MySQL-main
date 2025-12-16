@@ -128,7 +128,7 @@
                         <div class="row">
                             <div class="col-12 col-lg-12 mt-4">
                                 <label class="form-label text-black">Search Student</label><br>
-                                <input class="col-12" type="search" placeholder="Username" aria-label="Search" id="searchStudent" onkeyup="SearchStudent();">
+                                <input class="col-12" type="search" placeholder="Username" aria-label="Search" id="searchStud" onkeyup="SearchStud();">
                             </div>
 
                             <div class="col-12 col-lg-8 mt-3">
@@ -161,26 +161,22 @@
                                 <button class="btn btn-outline-primary col-12" onclick="StudentEnrollment();">Enroll Student</button>
                             </div>
 
-                            <div class="mt-4">
-                                <table class="table table-striped">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Assignment Id</th>
-                                        <th scope="col">Group</th>
-                                        <th scope="col">Marks</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Marking</th>
-                                        
-                                      </tr>
-                                    </thead>
-                                    <tbody id="container">
-                                      <!-- in here you can see assignment done or not before upgroup group -->
-                                      
-                                    </tbody>
-                                  </table>
-                            </div>
-                                   
+                           <div class="mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Student Id</th>
+                <th scope="col">Group</th>
+                <th scope="col">Course</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody id="container">
+            <!-- Student's group/course/status info will be loaded here via AJAX -->
+        </tbody>
+    </table>
+</div>
 
                         </div>
                     </div>

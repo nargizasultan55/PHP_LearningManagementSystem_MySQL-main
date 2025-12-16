@@ -732,6 +732,7 @@ function SearchTeacher() {
     request.send(form);
 }
 
+
 function TeacherEnrollment() {
     var tid = document.getElementById("searchTeacher").value;
     var group = document.getElementById("group").value;
@@ -761,6 +762,8 @@ function TeacherEnrollment() {
     request.send(form);
 }
 
+
+
 function SearchStudent() {
     var sid = document.getElementById("searchStudent").value;
 
@@ -777,6 +780,23 @@ function SearchStudent() {
 
     };
     request.open("POST", "process_searchStudent.php", true);
+    request.send(form);
+}
+
+
+function SearchStud() {
+    var sid = document.getElementById("searchStud").value;
+
+    var form = new FormData();
+    form.append("sid1", sid);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            document.getElementById("container").innerHTML = request.responseText;
+        }
+    };
+    request.open("POST", "process_searchStud.php", true);
     request.send(form);
 }
 
