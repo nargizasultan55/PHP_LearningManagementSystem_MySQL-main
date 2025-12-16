@@ -40,11 +40,14 @@ CREATE TABLE `course` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `course` (`id`,`name`) VALUES
-  (1, 'JavaScript'),
-  (2, 'Java'),
-  (3, 'Python');
-ALTER TABLE `course` AUTO_INCREMENT = 4;
+
+INSERT INTO `course` (`id`,`name`,`level`) VALUES
+  (1, 'JavaScript', 1),
+  (2, 'Java', 1),
+  (3, 'Python', 1),
+  (4, 'Softskills', 0),
+  (5, 'English', 0);
+ALTER TABLE `course` AUTO_INCREMENT = 6;
 
 -- Groups (backticked)
 CREATE TABLE `group` (
@@ -108,7 +111,8 @@ INSERT INTO `user` (`username`,`first_name`,`last_name`,`mobile`,`email`,`addres
   ('teacher1','Aida','Jusupova','0777111222','aida@lms.kg','Lenin','Bishkek',1,'pwdhash',2,1,2),
   ('student1','Ermek','Saidov','0777222333','ermek@lms.kg','Naryn','Osh',2,'pwdhash',3,1,1),
   ('student2','Aijan','Tursunova','0777333444','aijan@lms.kg','Archa','Batken',3,'pwdhash',3,1,2),
-  ('mentor1','Nurbek','Karaev','0777444555','mentor1@lms.kg','Ala-Too','Bishkek',1,'pwdhash',4,1,1);
+  ('mentor1','Nurbek','Karaev','0777444555','mentor1@lms.kg','Ala-Too','Bishkek',1,'pwdhash',4,1,1),
+  ('student3','Bakyt','Uulu','0777555666','bakyt@lms.kg','Chui','Bishkek',1,'pwdhash',3,1,1);
 
 -- User <-> Group enrollment
 CREATE TABLE `user_has_group` (

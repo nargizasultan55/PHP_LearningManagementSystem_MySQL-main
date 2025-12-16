@@ -30,7 +30,7 @@
                     <div class="btn-group col-lg-4">
                         <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <!-- check if user log in or not -->
-                            <?php session_start(); 
+                            <?php session_start();
                             if (!isset($_SESSION["u"])) {
                                 header("Location: SignIn.php");
                                 exit;
@@ -128,7 +128,10 @@
                         <div class="row">
                             <div class="col-12 col-lg-12 mt-4">
                                 <label class="form-label text-black">Search Student</label><br>
-                                <input class="col-12" type="search" placeholder="Username" aria-label="Search" id="searchStud" onkeyup="SearchStud();">
+                                <div class="input-group">
+                                    <input class="col-12 form-control" type="search" placeholder="Username" aria-label="Search" id="searchStud" onkeyup="SearchStud();">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="ShowAllStudents();"></button>
+                                </div>
                             </div>
 
                             <div class="col-12 col-lg-8 mt-3">
@@ -136,22 +139,22 @@
                                 <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="group">
                                     <option selected value="0">Select</option>
 
-                                    <?php 
+                                    <?php
                                     // get groups to the dropdown
-                                    $connection = new mysqli("localhost","root","","online_lms");
+                                    $connection = new mysqli("localhost", "root", "", "online_lms");
                                     $table = $connection->query("SELECT * FROM `group`");
 
-                                    if($table->num_rows){
-                                        for ($i=0; $i <$table->num_rows ; $i++) { 
+                                    if ($table->num_rows) {
+                                        for ($i = 0; $i < $table->num_rows; $i++) {
                                             $row = $table->fetch_assoc();
-                                            ?>
-                                            <option value="<?php echo($row["id"])?>"><?php echo($row["name"])?></option>
-                                            <?php
+                                    ?>
+                                            <option value="<?php echo ($row["id"]) ?>"><?php echo ($row["name"]) ?></option>
+                                    <?php
                                         }
                                     }
-                                    
+
                                     ?>
-                                    
+
                                 </select>
                             </div>
 
@@ -161,22 +164,46 @@
                                 <button class="btn btn-outline-primary col-12" onclick="StudentEnrollment();">Enroll Student</button>
                             </div>
 
-                           <div class="mt-4">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Student Id</th>
-                <th scope="col">Group</th>
-                <th scope="col">Course</th>
-                <th scope="col">Status</th>
-            </tr>
-        </thead>
-        <tbody id="container">
-            <!-- Student's group/course/status info will be loaded here via AJAX -->
-        </tbody>
-    </table>
+<div class="col-12 col-lg-8 mt-3">
+    <label class="form-label text-black">Level 1 Course (only one):</label>
+    <select class="form-select form-select-sm" id="course_level_1" name="course_level_1">
+        <option value="">Select</option>
+        <?php
+        $courses1 = $connection->query("SELECT * FROM course WHERE level=1");
+        while ($c = $courses1->fetch_assoc()) {
+            echo '<option value="'.$c["id"].'">'.htmlspecialchars($c["name"]).'</option>';
+        }
+        ?>
+    </select>
 </div>
+<div class="col-12 col-lg-8 mt-3">
+    <label class="form-label text-black">Level 0 Courses (up to two):</label>
+    <select class="form-select form-select-sm" id="courses_level_0" name="courses_level_0[]" multiple size="3">
+        <?php
+        $courses0 = $connection->query("SELECT * FROM course WHERE level=0");
+        while ($c = $courses0->fetch_assoc()) {
+            echo '<option value="'.$c["id"].'">'.htmlspecialchars($c["name"]).'</option>';
+        }
+        ?>
+    </select>
+    <small class="text-muted"></small>
+</div>
+                            <div class="mt-4">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Student Id</th>
+                                            <th scope="col">Group</th>
+                                            <th scope="col">Course</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="container">
+                                        <!-- Student's group/course/status info will be loaded here via AJAX -->
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                     </div>
@@ -191,7 +218,18 @@
 
     <script src="bootstrap.bundle.js"></script>
     <script src="script.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    var select = document.getElementById("courses_level_0");
+    select.addEventListener("change", function() {
+        let selected = Array.from(select.selectedOptions);
+        if (selected.length > 2) {
+            selected[selected.length - 1].selected = false;
+            alert("You can select up to 2 courses for Level 0!");
+        }
+    });
+});
+</script>
 </body>
 
 </html>
-

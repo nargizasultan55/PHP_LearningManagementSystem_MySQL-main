@@ -1,6 +1,8 @@
 <?php
 $group = $_POST["group"];
 $sid = $_POST["sid"];
+$course_level_1 = $_POST["course_level_1"] ?? "";
+$courses_level_0 = $_POST["courses_level_0"] ?? [];
 
 $connection = new mysqli("localhost", "root", "", "online_lms");
 $phpResponseObject = new stdClass();
@@ -35,25 +37,24 @@ if ($group == "0" || empty($group)) {
         $stmt->execute();
     }
 
-    // Check if student is already enrolled in courses for the new group
-    $stmt = $connection->prepare("SELECT 1 FROM user_has_group_has_course WHERE user_username=? AND group_has_course_group_id=?");
-    $stmt->bind_param("si", $sid, $group);
+    // Удаляем все старые курсы для этого студента
+    $stmt = $connection->prepare("DELETE FROM user_has_group_has_course WHERE user_username=?");
+    $stmt->bind_param("s", $sid);
     $stmt->execute();
-    $result = $stmt->get_result();
 
-    if ($result->num_rows == 0) {
-        // Get all courses for the group
-        $stmt2 = $connection->prepare("SELECT course_id FROM group_has_course WHERE group_id=?");
-        $stmt2->bind_param("i", $group);
-        $stmt2->execute();
-        $courses = $stmt2->get_result();
-        while ($row2 = $courses->fetch_assoc()) {
-            $course = $row2["course_id"];
-            // Enroll student in each course for the group
-            $stmt3 = $connection->prepare("INSERT INTO user_has_group_has_course (user_username, group_has_course_group_id, group_has_course_course_id, complete_status_id) VALUES (?, ?, ?, 2)");
-            $stmt3->bind_param("sii", $sid, $group, $course);
-            $stmt3->execute();
-        }
+    // Добавляем выбранный курс level=1
+    if ($course_level_1 != "") {
+        $stmt = $connection->prepare("INSERT INTO user_has_group_has_course (user_username, group_has_course_group_id, group_has_course_course_id, complete_status_id) VALUES (?, ?, ?, 2)");
+        $stmt->bind_param("sii", $sid, $group, $course_level_1);
+        $stmt->execute();
+    }
+
+    // Добавляем выбранные курсы level=0 (максимум 2)
+    $courses_level_0 = array_slice($courses_level_0, 0, 2);
+    foreach ($courses_level_0 as $course_id) {
+        $stmt = $connection->prepare("INSERT INTO user_has_group_has_course (user_username, group_has_course_group_id, group_has_course_course_id, complete_status_id) VALUES (?, ?, ?, 2)");
+        $stmt->bind_param("sii", $sid, $group, $course_id);
+        $stmt->execute();
     }
 
     $phpResponseObject->msg = "Successfully enrolled student";

@@ -784,9 +784,24 @@ function SearchStudent() {
 }
 
 
-function SearchStud() {
-    var sid = document.getElementById("searchStud").value;
+function ShowAllStudents() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            document.getElementById("container").innerHTML = request.responseText;
+            attachStudentRowEvents();
+        }
+    };
+    request.open("GET", "process_allStudents.php", true);
+    request.send();
+}
 
+function SearchStud() {
+    var sid = document.getElementById("searchStud").value.trim();
+    if (sid === "") {
+        ShowAllStudents();
+        return;
+    }
     var form = new FormData();
     form.append("sid1", sid);
 
@@ -794,24 +809,61 @@ function SearchStud() {
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
             document.getElementById("container").innerHTML = request.responseText;
+            attachStudentRowEvents();
         }
     };
     request.open("POST", "process_searchStud.php", true);
     request.send(form);
 }
 
+// Attach events to delete/update buttons after table update
+function attachStudentRowEvents() {
+    document.querySelectorAll(".deleteStudentBtn").forEach(function(btn) {
+        btn.onclick = function() {
+            if (confirm("Delete this student?")) {
+                var username = btn.getAttribute("data-username");
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "process_deleteStudent.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onload = function() {
+                    alert(xhr.responseText);
+                    ShowAllStudents();
+                };
+                xhr.send("username=" + encodeURIComponent(username));
+            }
+        };
+    });
+
+    document.querySelectorAll(".updateStudentBtn").forEach(function(btn) {
+        btn.onclick = function() {
+            var username = btn.getAttribute("data-username");
+            // Здесь можно реализовать модальное окно или редирект на страницу редактирования
+            window.location = "UpdateStudent.php?username=" + encodeURIComponent(username);
+        };
+    });
+}
+
+// Показываем всех студентов при загрузке страницы
+document.addEventListener("DOMContentLoaded", ShowAllStudents);
+
 function StudentEnrollment() {
-    var sid = document.getElementById("searchStudent").value;
+    var sid = document.getElementById("searchStud").value;
     var group = document.getElementById("group").value;
+    var course_level_1 = document.getElementById("course_level_1").value;
+    var courses_level_0 = Array.from(document.getElementById("courses_level_0").selectedOptions).map(opt => opt.value);
 
     var form = new FormData();
     form.append("sid", sid);
     form.append("group", group);
+    form.append("course_level_1", course_level_1);
+    // Добавляем до 2 курсов уровня 0
+    courses_level_0.slice(0, 2).forEach(function(val) {
+        form.append("courses_level_0[]", val);
+    });
 
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
-            // alert(request.responseText);
             var jsonResponseText = request.responseText;
             var jsResponseObject = JSON.parse(jsonResponseText);
 
@@ -821,7 +873,6 @@ function StudentEnrollment() {
                 location.reload();
             }
         }
-
     };
     request.open("POST", "process_addStudent.php", true);
     request.send(form);
