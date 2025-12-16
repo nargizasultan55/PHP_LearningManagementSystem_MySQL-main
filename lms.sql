@@ -36,6 +36,7 @@ CREATE TABLE `gender` (
 CREATE TABLE `course` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
+  `level` INT NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -49,14 +50,15 @@ ALTER TABLE `course` AUTO_INCREMENT = 4;
 CREATE TABLE `group` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
+  
   PRIMARY KEY (`id`)
 );
 
 INSERT INTO `group` (`id`,`name`) VALUES
-  (1,'JS1'),
-  (2,'JS2'),
-  (3,'JAVA1'),
-  (4,'JAVA2');
+  (1,'JS1',DATE_ADD(CURDATE(), INTERVAL 9 MONTH)),
+  (2,'JS2', DATE_ADD(CURDATE(), INTERVAL 9 MONTH)),
+  (3,'JAVA1', DATE_ADD(CURDATE(), INTERVAL 9 MONTH)),
+  (4,'JAVA2', DATE_ADD(CURDATE(), INTERVAL 9 MONTH));
 ALTER TABLE `group` AUTO_INCREMENT = 5;
 
 -- Group <-> Course mapping
@@ -112,17 +114,17 @@ INSERT INTO `user` (`username`,`first_name`,`last_name`,`mobile`,`email`,`addres
 CREATE TABLE `user_has_group` (
   `user_username` VARCHAR(100) NOT NULL,
   `group_id` INT NOT NULL,
-  `expire_date` DATE DEFAULT NULL,
+  
   PRIMARY KEY (`user_username`,`group_id`),
   CONSTRAINT `fk_uhg_user` FOREIGN KEY (`user_username`) REFERENCES `user`(`username`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_uhg_group` FOREIGN KEY (`group_id`) REFERENCES `group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO `user_has_group` (`user_username`,`group_id`,`expire_date`) VALUES
-  ('student1',1,'2024-12-31'),
-  ('student2',2,'2024-12-31'),
-  ('teacher1',1,'2025-12-31'),
-  ('mentor1',1,'2025-12-31');
+INSERT INTO `user_has_group` (`user_username`,`group_id`) VALUES
+  ('student1',1),
+  ('student2',2),
+  ('teacher1',1),
+  ('mentor1',1);
 
 -- Completion statuses
 CREATE TABLE `complete_status` (
