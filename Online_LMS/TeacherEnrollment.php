@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <title>Teacher Enrollment</title>
     <link rel="stylesheet" href="bootstrap.css" />
     <link rel="stylesheet" href="style.css" />
@@ -13,24 +11,18 @@
 </head>
 
 <body>
-    <!-- Teacher enrollment -->
     <div class="container-fluid">
         <div class="row">
             <nav class="navbar navbar-light navbar-expand-lg bg-dark fixed-top">
                 <div class="container-fluid">
                     <div class="col-4">
-                        <a href="#" class="navbar-brand text-white"><img src="system.png" class="icon2" />Learning
-                            Management System</a>
+                        <a href="#" class="navbar-brand text-white">
+                            <img src="system.png" class="icon2" />Learning Management System
+                        </a>
                     </div>
-
-
-                    <!-- Dropdown -->
-
-
                     <div class="btn-group col-lg-4">
                         <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <!-- check if user log in or not -->
-                            <?php session_start(); 
+                            <?php session_start();
                             if (!isset($_SESSION["u"])) {
                                 header("Location: SignIn.php");
                                 exit;
@@ -46,177 +38,120 @@
                             <a class="dropdown-item" href="SignOut.php">Sign Out</a>
                         </div>
                     </div>
-
-                    <!-- End Dropdown -->
                 </div>
             </nav>
-
-
             <!-- Menu -->
             <div class="col-4 col-lg-3 mt-5">
                 <div class="row bg-primary bg-opacity-10 mt-5">
-
-
                     <div class="col-12 mt-4">
                         <form action="AdminDash.php">
                             <button class="btn btn-outline-dark col-12" type="submit">Dashboard</button>
                         </form>
-
                     </div>
                     <div class="col-12 mt-3">
                         <form action="ProfileAdmin.php">
                             <button class="btn btn-outline-dark col-12" type="submit">Profile</button>
                         </form>
-
                     </div>
-
                     <div class="col-12 mt-3">
                         <form action="UserManage.php">
                             <button class="btn btn-outline-dark col-12" type="submit">User Manage</button>
                         </form>
-
                     </div>
-
                     <div class="col-12 mt-3">
                         <form action="ResultView.php">
                             <button class="btn btn-outline-dark col-12" type="submit">Results</button>
                         </form>
-
                     </div>
-
                     <div class="col-12 mt-3">
                         <form action="StudentEnrollment.php">
                             <button class="btn btn-outline-dark col-12" type="submit">Student Enrollment</button>
                         </form>
-
                     </div>
                     <div class="col-12 mt-3">
                         <form action="TeacherEnrollment.php">
                             <button class="btn btn-outline-dark col-12 active" type="submit">Teacher Enrollment</button>
                         </form>
-
                     </div>
                     <div class="col-12 mt-3">
                         <form action="AccademicEnrollment.php">
                             <button class="btn btn-outline-dark col-12" type="submit">Mentor Enrollment</button>
                         </form>
-
                     </div>
-
                     <div class="col-12 mt-5 mb-2">
                         <form action="SignOut.php">
                             <button class="btn btn-outline-success col-12" type="submit">Sign Out</button>
                         </form>
-
                     </div>
                 </div>
             </div>
-
             <!-- Menu end -->
-
             <div class="col-8 col-lg-9 mt-5">
                 <div class="row">
                     <div class="col-8 col-lg-9 mt-5"></div>
-                    <div class="">
+                    <div>
                         <label class="fs-2">Teacher Enrollment</label>
                     </div>
-                    <div class="">
+                    <div>
                         <label class="fs-6 text-secondary">Admin . Teacher Enrollment</label>
                     </div>
-
                     <div class="col-12">
                         <div class="row">
                             <div class="col-12 col-lg-12 mt-4">
-                                <!-- when add teacher username auto load current classes enroll to the teacher in the below table (onkeyup function) -->
-                                <label class="form-label text-black">Search Teacher</label><br>
-                                <input class="col-12" type="search" placeholder="Username" aria-label="Search" id="searchTeacher" onkeyup="SearchTeacher();">
-                            </div>
-
-                            <div class="col-12 col-lg-4 mt-3">
-                                <label class="form-label text-black">Group</label>
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="group">
-                                    <option selected value="0">Select</option>
-
-                                    <?php 
-                                    // load groups to the dropdown
-                                    $connection = new mysqli("localhost","root","","online_lms");
-                                    $table = $connection->query("SELECT * FROM `group`");
-
-                                    if($table->num_rows){
-                                        for ($i=0; $i <$table->num_rows ; $i++) { 
-                                            $row = $table->fetch_assoc();
-                                            ?>
-                                            <option value="<?php echo($row["id"])?>"><?php echo($row["name"])?></option>
+                                <label class="form-label text-black">Search Teacher</label>
+                                <input class="col-12 mb-3" type="search" placeholder="Username" aria-label="Search" id="searchTeacher" onkeyup="SearchTeacher();">
+                                <form id="teacherEnrollForm" onsubmit="TeacherEnrollment(); return false;">
+                                    <div class="mb-3">
+                                        <label class="form-label text-black">Groups (multiple):</label>
+                                        <select id="groups" name="groups[]" class="form-select" multiple size="5">
                                             <?php
-                                        }
-                                    }
-                                    
-                                    ?>
-                                    
-                                </select>
-                            </div>
-
-                            <div class="col-12 col-lg-4 mt-3">
-                                <label class="form-label text-black">Course</label>
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="course">
-                                    <option selected value="0">Select</option>
-                                    <?php 
-                                    // load courses to the dropdown
-                                    $connection = new mysqli("localhost","root","","online_lms");
-                                    $table2 = $connection->query("SELECT * FROM `course`");
-
-                                    if($table2->num_rows){
-                                        for ($i=0; $i <$table2->num_rows ; $i++) { 
-                                            $row2 = $table2->fetch_assoc();
+                                            $connection = new mysqli("localhost", "root", "", "online_lms");
+                                            $groups = $connection->query("SELECT * FROM `group`");
+                                            while ($g = $groups->fetch_assoc()) {
+                                                echo '<option value="' . $g["id"] . '">' . htmlspecialchars($g["name"]) . '</option>';
+                                            }
                                             ?>
-                                            <option value="<?php echo($row2["id"])?>"><?php echo($row2["name"])?></option>
+                                        </select>
+                                        <small class="text-muted"></small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-black">Course (only one):</label>
+                                        <select id="course" name="course" class="form-select">
+                                            <option value="">Select</option>
                                             <?php
-                                        }
-                                    }
-                                    
-                                    ?>
-                                    
-                                </select>
+                                            $courses = $connection->query("SELECT * FROM course WHERE level=1");
+                                            while ($c = $courses->fetch_assoc()) {
+                                                echo '<option value="' . $c["id"] . '">' . htmlspecialchars($c["name"]) . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary col-12">Add</button>
+                                </form>
                             </div>
-
-                            <div class="col-12 col-lg-4 mt-4">
-                                <label class="form-label text-black"></label>
-                                <!-- teacher enrollment process -->
-                                <button class="btn btn-outline-primary col-12" onclick="TeacherEnrollment();">Add</button>
-                            </div>
-
                             <div class="mt-4">
                                 <table class="table table-striped">
                                     <thead>
-                                      <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Teacher Id</th>
-                                        <th scope="col">Group</th>
-                                        <th scope="col">Course</th>
-                                        
-                                      </tr>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Teacher Id</th>
+                                            <th scope="col">Group</th>
+                                            <th scope="col">Course</th>
+                                        </tr>
                                     </thead>
+
                                     <tbody id="container">
-                                      <!-- load teacher has classes when add teacher username in this table -->
-                                      
+                                        <?php include 'process_allTeachers.php'; ?>
                                     </tbody>
-                                  </table>
+                                </table>
                             </div>
-                                   
-
                         </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="col-12 text-center text-black-50 mt-4 mb-2">
-            <label>PHP_2025</label>
-        </div>
-    </div>
-
-    <script src="bootstrap.bundle.js"></script>
-    <script src="script.js"></script>
+                        <!-- ...остальной код... -->
+                        <script src="bootstrap.bundle.js"></script>
+                        <script src="script.js"></script>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", ShowAllTeachers);
+                        </script>
 </body>
 
 </html>

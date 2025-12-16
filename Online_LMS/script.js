@@ -735,28 +735,28 @@ function SearchTeacher() {
 
 function TeacherEnrollment() {
     var tid = document.getElementById("searchTeacher").value;
-    var group = document.getElementById("group").value;
+    var groups = Array.from(document.getElementById("groups").selectedOptions).map(opt => opt.value);
     var course = document.getElementById("course").value;
 
     var form = new FormData();
     form.append("tid", tid);
-    form.append("group", group);
+    groups.forEach(function(val) {
+        form.append("groups[]", val);
+    });
     form.append("course", course);
 
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
-            // alert(request.responseText);
             var jsonResponseText = request.responseText;
             var jsResponseObject = JSON.parse(jsonResponseText);
 
             alert(jsResponseObject.msg);
 
-            if (jsResponseObject.msg == "Succesfully Added To Course") {
+            if (jsResponseObject.msg.indexOf("Successfully") !== -1) {
                 location.reload();
             }
         }
-
     };
     request.open("POST", "process_addTeacher.php", true);
     request.send(form);
@@ -793,6 +793,18 @@ function ShowAllStudents() {
         }
     };
     request.open("GET", "process_allStudents.php", true);
+    request.send();
+}
+function ShowAllTeachers() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            document.getElementById("container").innerHTML = request.responseText;
+            // Если нужны события для кнопок учителя, добавь здесь свою функцию, например:
+            // attachTeacherRowEvents();
+        }
+    };
+    request.open("GET", "process_allTeachers.php", true);
     request.send();
 }
 

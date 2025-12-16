@@ -1,8 +1,8 @@
 <?php  
 // Teacher enrollment process
-$group = $_POST["group"];
-$course = $_POST["course"];
-$tid = $_POST["tid"];
+$groups = $_POST["groups"] ?? [];
+$course = $_POST["course"] ?? "";
+$tid = $_POST["tid"] ?? "";
 
 $connection = new mysqli("localhost","root","","online_lms");
 
@@ -10,37 +10,35 @@ $connection = new mysqli("localhost","root","","online_lms");
 $phpResponseObject = new stdClass();
 
 // validate process
-if($group=="0"){
-    $phpResponseObject->msg = "Select group";
-}else if($course=="0"){
+if(empty($groups)) {
+    $phpResponseObject->msg = "Select at least one group";
+} else if(empty($course)) {
     $phpResponseObject->msg = "Select course";
-}else if($tid==null){
+} else if(empty($tid)) {
     $phpResponseObject->msg = "Enter teacher id";
-}else{
-    // check teacher already added or not
-    $table2 = $connection->query("SELECT * FROM `user_has_group_has_course` WHERE 
-    `group_has_course_group_id`='".$group."' AND `group_has_course_course_id`='".$course."' AND `user_username`='".$tid."'");
-    $row = $table2->fetch_assoc();
+} else {
+    // Удаляем старые группы и курсы для этого учителя
+    $connection->query("DELETE FROM user_has_group WHERE user_username='$tid'");
+    $connection->query("DELETE FROM user_has_group_has_course WHERE user_username='$tid'");
 
-    if($row){
-        // if already added
-        $phpResponseObject->msg = "Teacher already added to this course. ";
-    }else{
-// if not added to course then search teacher has group or not
-        $table3 = $connection->query("SELECT * FROM `group_has_course` WHERE `group_id`='".$group."' AND `course_id`='".$course."'");
-        $row3 = $table3->fetch_assoc();
-        if(!$row3){
-            // if teacher has not enroll for group
-            $connection->query("INSERT INTO `group_has_course` VALUES('".$group."','".$course."')");
-        }
-// insert course to the group in selected teacher
-            $table = $connection->query("INSERT INTO `user_has_group_has_course` VALUES('".$tid."','".$group."','".$course."','3')");
-
-            $phpResponseObject->msg = "Succesfully Added To Course";
+    // Добавляем новые группы
+    foreach ($groups as $group_id) {
+        $connection->query("INSERT INTO user_has_group (user_username, group_id) VALUES ('$tid', '$group_id')");
     }
+
+    // Добавляем курс (только один) для всех выбранных групп
+    foreach ($groups as $group_id) {
+        // Если связи группы и курса нет — добавляем
+        $table3 = $connection->query("SELECT * FROM `group_has_course` WHERE `group_id`='$group_id' AND `course_id`='$course'");
+        if(!$table3->fetch_assoc()){
+            $connection->query("INSERT INTO `group_has_course` VALUES('$group_id','$course')");
+        }
+        // Назначаем учителя на курс в группе
+        $connection->query("INSERT INTO `user_has_group_has_course` VALUES('$tid','$group_id','$course','3')");
+    }
+
+    $phpResponseObject->msg = "Successfully added teacher to selected groups and course";
 }
 
-$jsonResponseText = json_encode($phpResponseObject);
-echo ($jsonResponseText);
-
+echo json_encode($phpResponseObject);
 ?>

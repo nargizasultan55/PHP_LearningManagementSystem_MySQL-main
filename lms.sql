@@ -109,11 +109,12 @@ INSERT INTO `gender` (`id`,`name`) VALUES (1,'Male'),(2,'Female');
 INSERT INTO `user` (`username`,`first_name`,`last_name`,`mobile`,`email`,`address_1`,`address_2`,`city_id`,`password`,`user_type_id`,`status_id`,`gender_id`) VALUES
   ('admin','Aibek','Bekmamatov','0771234567','admin@lms.kg','Ala-Too','Bishkek',1,'admin',1,1,1),
   ('teacher1','Aida','Jusupova','0777111222','aida@lms.kg','Lenin','Bishkek',1,'pwdhash',2,1,2),
+  ('teacher2','Ivan','Ivanov','0777666777','ivan@lms.kg','Chui','Bishkek',2,'pwdhash',2,1,1),
   ('student1','Ermek','Saidov','0777222333','ermek@lms.kg','Naryn','Osh',2,'pwdhash',3,1,1),
   ('student2','Aijan','Tursunova','0777333444','aijan@lms.kg','Archa','Batken',3,'pwdhash',3,1,2),
   ('mentor1','Nurbek','Karaev','0777444555','mentor1@lms.kg','Ala-Too','Bishkek',1,'pwdhash',4,1,1),
+  ('mentor2','Elena','Petrova','0777888999','elena@lms.kg','Lenina','Osh',3,'pwdhash',4,1,2),
   ('student3','Bakyt','Uulu','0777555666','bakyt@lms.kg','Chui','Bishkek',1,'pwdhash',3,1,1);
-
 -- User <-> Group enrollment
 CREATE TABLE `user_has_group` (
   `user_username` VARCHAR(100) NOT NULL,
